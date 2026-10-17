@@ -1,0 +1,13 @@
+{
+  "name": "tinyurl-clone",
+  "version": "1.0.0",
+  "description": "Full-featured TinyURL clone with URL shortening, custom alias, password protection, expiration, QR code, analytics & management dashboard.",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "keywords": ["url-shortener", "tinyurl", "analytics", "qr-code"],
+  "author": "Hammad",
+  "license": "MIT"
+}

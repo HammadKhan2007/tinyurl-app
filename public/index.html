@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyURL Clone - Fast, Secure & Smart URL Shortener</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="header">
+    <div class="container header-container">
+      <div class="logo">
+        <span class="logo-icon">🔗</span>
+        <span class="logo-text">Tiny<span class="highlight">URL</span></span>
+        <span class="badge badge-pro">PRO CLONE</span>
+      </div>
+      <nav class="nav">
+        <a href="#shortener" class="nav-link active">Shortener</a>
+        <a href="#dashboard" class="nav-link">My Links</a>
+        <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Hero Section -->
+  <main class="main">
+    <section id="shortener" class="hero-section">
+      <div class="container hero-container">
+        <h1 class="hero-title">Shorten, Share &amp; Track <br><span class="gradient-text">Any Link in Seconds</span></h1>
+        <p class="hero-subtitle">The modern URL shortener packed with custom aliases, password locks, auto-expiry, QR codes, and real-time deep analytics.</p>
+
+        <!-- Shortener Form Card -->
+        <div class="card shortener-card">
+          <form id="shortenForm">
+            <div class="input-group-main">
+              <span class="input-icon">🔗</span>
+              <input type="url" id="longUrl" placeholder="Paste your long URL here (e.g. https://example.com/very/long/link)..." required autofocus>
+              <button type="submit" class="btn btn-primary" id="shortenBtn">
+                <span class="btn-text">Shorten URL</span>
+                <span class="spinner" style="display: none;"></span>
+              </button>
+            </div>
+
+            <!-- Advanced Options Toggle -->
+            <div class="accordion-header" id="advToggle">
+              <span class="accordion-title">⚡ Customize Link &amp; Advanced Options</span>
+              <span class="accordion-arrow">▼</span>
+            </div>
+
+            <div class="accordion-content" id="advContent" style="display: none;">
+              <div class="grid-2">
+                <div class="form-group">
+                  <label for="customSlug">Custom Alias / Slug (Optional)</label>
+                  <div class="input-prefix-wrapper">
+                    <span class="prefix" id="domainPrefix">tinyurl/</span>
+                    <input type="text" id="customSlug" placeholder="my-custom-name" pattern="[a-zA-Z0-9_-]{3,50}" title="3-50 alphanumeric characters or hyphens">
+                  </div>
+                  <small class="hint">Make your link branded and easy to remember.</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="linkTitle">Link Title / Note (Optional)</label>
+                  <input type="text" id="linkTitle" class="input" placeholder="e.g. Summer Promo, Portfolio">
+                  <small class="hint">For your personal organization in the dashboard.</small>
+                </div>
+              </div>
+
+              <div class="grid-3" style="margin-top: 15px;">
+                <div class="form-group">
+                  <label for="linkPassword">🔒 Password Lock (Optional)</label>
+                  <input type="password" id="linkPassword" class="input" placeholder="Protect with password">
+                  <small class="hint">Only visitors with this password can open it.</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="linkExpiry">⏳ Expiration Date (Optional)</label>
+                  <input type="datetime-local" id="linkExpiry" class="input">
+                  <small class="hint">Link will auto-deactivate after this time.</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="maxClicks">🚫 Max Click Limit (Optional)</label>
+                  <input type="number" id="maxClicks" class="input" placeholder="0 = Unlimited" min="0">
+                  <small class="hint">Auto-expires after reaching this visit count.</small>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- Result Area (Appears after shortening) -->
+          <div id="resultArea" class="result-area" style="display: none;">
+            <div class="result-header">
+              <span class="success-icon">🎉</span>
+              <div>
+                <h3 class="result-title">Your Short URL is Ready!</h3>
+                <p class="result-sub" id="resultOriginalUrl">https://example.com</p>
+              </div>
+            </div>
+
+            <div class="result-box">
+              <input type="text" id="shortUrlDisplay" readonly>
+              <div class="action-buttons">
+                <button type="button" class="btn btn-copy" id="copyResultBtn">
+                  <span>📋 Copy</span>
+                </button>
+                <button type="button" class="btn btn-outline" id="qrResultBtn">
+                  <span>📱 QR Code</span>
+                </button>
+                <a href="#" target="_blank" class="btn btn-outline" id="previewResultBtn">
+                  <span>🛡️ Preview</span>
+                </a>
+                <button type="button" class="btn btn-outline" id="statsResultBtn">
+                  <span>📊 Stats</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Share Options -->
+            <div class="quick-share">
+              <span>Share via:</span>
+              <a href="#" id="shareWhatsapp" target="_blank" class="share-btn share-wa">WhatsApp</a>
+              <a href="#" id="shareTwitter" target="_blank" class="share-btn share-tw">X (Twitter)</a>
+              <a href="#" id="shareLinkedin" target="_blank" class="share-btn share-li">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard / History Section -->
+    <section id="dashboard" class="dashboard-section">
+      <div class="container">
+        <div class="dashboard-header">
+          <div>
+            <h2 class="section-title">Your Shortened Links</h2>
+            <p class="section-subtitle">Manage, track, edit, and inspect performance of all your links.</p>
+          </div>
+          <div class="dashboard-actions">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search links by name, code or URL...">
+            <button id="refreshBtn" class="btn btn-secondary">🔄 Refresh</button>
+          </div>
+        </div>
+
+        <!-- Links Table / Cards -->
+        <div class="table-container">
+          <table class="links-table">
+            <thead>
+              <tr>
+                <th>Short Link</th>
+                <th>Original Destination</th>
+                <th>Status</th>
+                <th>Clicks</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="linksTableBody">
+              <tr>
+                <td colspan="6" class="text-center loading-text">Loading your links...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- QR Code Modal -->
+  <div id="qrModal" class="modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>📱 QR Code for Short Link</h3>
+        <button class="modal-close" id="closeQrModal">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div id="qrcodeContainer" class="qr-box"></div>
+        <p id="qrUrlText" class="qr-url-text"></p>
+        <div class="btn-group" style="margin-top: 20px;">
+          <button id="downloadQrBtn" class="btn btn-primary">⬇️ Download QR Image (PNG)</button>
+          <button id="closeQrBtn" class="btn btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics Modal -->
+  <div id="analyticsModal" class="modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card modal-lg">
+      <div class="modal-header">
+        <h3>📊 Real-Time Analytics &amp; Performance</h3>
+        <button class="modal-close" id="closeAnalyticsModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="stats-overview">
+          <div class="stat-card">
+            <span class="stat-number" id="statTotalClicks">0</span>
+            <span class="stat-label">Total Visits</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="statStatus">Active</span>
+            <span class="stat-label">Link Status</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="statCreated">-</span>
+            <span class="stat-label">Date Created</span>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 20px;">
+          <!-- Devices Breakdown -->
+          <div class="chart-box">
+            <h4>📱 Device Distribution</h4>
+            <div id="deviceStats" class="breakdown-list"></div>
+          </div>
+          <!-- Browsers Breakdown -->
+          <div class="chart-box">
+            <h4>🌐 Browser Breakdown</h4>
+            <div id="browserStats" class="breakdown-list"></div>
+          </div>
+        </div>
+
+        <!-- Referrers -->
+        <div class="chart-box" style="margin-top: 20px;">
+          <h4>🔗 Top Traffic Sources / Referrers</h4>
+          <div id="referrerStats" class="breakdown-list"></div>
+        </div>
+
+        <!-- Recent Activity Log -->
+        <div class="chart-box" style="margin-top: 20px;">
+          <h4>🕒 Recent Visit Log (Latest 20)</h4>
+          <div class="log-table-wrapper">
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Device</th>
+                  <th>Browser / OS</th>
+                  <th>Referrer</th>
+                </tr>
+              </thead>
+              <tbody id="recentLogBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Link Modal -->
+  <div id="editModal" class="modal" style="display: none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>✏️ Edit Short Link</h3>
+        <button class="modal-close" id="closeEditModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <input type="hidden" id="editCode">
+          <div class="form-group">
+            <label>Destination URL</label>
+            <input type="url" id="editOriginalUrl" class="input" required>
+          </div>
+          <div class="form-group">
+            <label>Title / Note</label>
+            <input type="text" id="editTitle" class="input">
+          </div>
+          <div class="form-group">
+            <label>Max Click Limit (0 = Unlimited)</label>
+            <input type="number" id="editMaxClicks" class="input" min="0">
+          </div>
+          <div class="form-group">
+            <label>Expiration Date</label>
+            <input type="datetime-local" id="editExpiry" class="input">
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="editIsActive"> Link is Active
+            </label>
+          </div>
+          <div class="btn-group" style="margin-top: 20px;">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <p>© 2026 TinyURL Clone. Built with native Node.js &amp; SQLite. Fast, private, and secure.</p>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
