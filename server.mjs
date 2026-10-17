@@ -277,9 +277,16 @@ function renderPreviewPage(link, shortUrl) {
 </html>`;
 }
 
+function getBaseUrl(req) {
+  const proto = req.headers["x-forwarded-proto"] || (req.socket.encrypted ? "https" : "http");
+  const host = req.headers.host || `localhost:${PORT}`;
+  return `${proto}://${host}`;
+}
+
 // HTTP Request Handler
 const server = http.createServer(async (req, res) => {
-  const url = new URL(req.url, `http://${req.headers.host || "localhost:3000"}`);
+  const baseUrl = getBaseUrl(req);
+  const url = new URL(req.url, baseUrl);
   const pathname = url.pathname;
 
   // Handle CORS Preflight
@@ -350,8 +357,7 @@ const server = http.createServer(async (req, res) => {
       `);
       const result = stmt.run(code, originalUrl, title, passwordHash, passwordSalt, expiresAt, maxClicks, createdAt);
 
-      const host = req.headers.host || `localhost:${PORT}`;
-      const shortUrl = `http://${host}/${code}`;
+      const shortUrl = `${baseUrl}/${code}`;
 
       return sendJson(res, 201, {
         ok: true,
@@ -386,10 +392,9 @@ const server = http.createServer(async (req, res) => {
       query += " ORDER BY id DESC LIMIT 100";
 
       const links = db.prepare(query).all(...params);
-      const host = req.headers.host || `localhost:${PORT}`;
       const mapped = links.map(l => ({
         ...l,
-        short_url: `http://${host}/${l.code}`,
+        short_url: `${baseUrl}/${l.code}`,
         is_expired: l.expires_at ? new Date(l.expires_at) < new Date() : false,
         is_max_reached: l.max_clicks > 0 && l.clicks >= l.max_clicks
       }));
@@ -433,13 +438,12 @@ const server = http.createServer(async (req, res) => {
       // Top referrers
       const referrers = db.prepare("SELECT referer, COUNT(*) as count FROM analytics WHERE link_id = ? AND referer != '' GROUP BY referer ORDER BY count DESC LIMIT 5").all(link.id);
 
-      const host = req.headers.host || `localhost:${PORT}`;
       return sendJson(res, 200, {
         ok: true,
         link: {
           id: link.id,
           code: link.code,
-          short_url: `http://${host}/${link.code}`,
+          short_url: `${baseUrl}/${link.code}`,
           original_url: link.original_url,
           title: link.title,
           has_password: !!link.password_hash,
@@ -567,8 +571,7 @@ const server = http.createServer(async (req, res) => {
     const link = db.prepare("SELECT * FROM links WHERE code = ?").get(code);
 
     if (link) {
-      const host = req.headers.host || `localhost:${PORT}`;
-      const shortUrl = `http://${host}/${link.code}`;
+      const shortUrl = `${baseUrl}/${link.code}`;
 
       // Check Preview Flag (?preview=1)
       if (url.searchParams.get("preview") === "1") {

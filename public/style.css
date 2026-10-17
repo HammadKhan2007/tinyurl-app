@@ -537,7 +537,7 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: var(--shadow);
 }
 
@@ -545,6 +545,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  min-width: 760px;
 }
 
 .links-table th {
@@ -554,12 +555,12 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  padding: 14px 20px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .links-table td {
-  padding: 16px 20px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.92rem;
   vertical-align: middle;
@@ -577,6 +578,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  max-width: 240px;
 }
 
 .link-short {
@@ -584,6 +586,7 @@ body {
   font-weight: 600;
   color: var(--primary);
   text-decoration: none;
+  word-break: break-all;
 }
 
 .link-short:hover {
@@ -596,7 +599,7 @@ body {
 }
 
 .dest-url {
-  max-width: 260px;
+  max-width: 220px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -629,27 +632,42 @@ body {
 .action-cell {
   display: flex;
   gap: 6px;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .btn-icon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 6px 10px;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.btn-icon svg {
+  display: block;
+  pointer-events: none;
 }
 
 .btn-icon:hover {
   border-color: var(--border-focus);
-  background: var(--bg-card-hover);
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  transform: translateY(-1px);
 }
 
 .btn-danger-icon:hover {
   border-color: var(--danger);
-  color: var(--danger);
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
 }
 
 /* Modals */
