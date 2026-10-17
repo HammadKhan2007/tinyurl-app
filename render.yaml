@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: tinyurl-clone
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: node server.mjs
+    envVars:
+      - key: NODE_VERSION
+        value: 24.2.0
